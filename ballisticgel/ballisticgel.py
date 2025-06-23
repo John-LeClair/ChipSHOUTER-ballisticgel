@@ -32,7 +32,7 @@ import time
 from typing import Optional, Type, Union
 
 def program_sam_firmware(serial_port : Optional[str]=None,
-    hardware_type : Optional[str]=None, fw_path : Optional[str]=None):
+    hardware_type : Optional[str]='cw521', fw_path : Optional[str]=None):
     """Program firmware onto an erased chipwhisperer scope or target
 
     See https://chipwhisperer.readthedocs.io/en/latest/firmware.html for more information
@@ -150,7 +150,7 @@ class CW521(object):
             pload = packuint32(size)
             pload.extend(packuint32(addr))
             self.usb.sendCtrl(cmd, data=pload)
-            return self.usb.usbdev().read(self.usb.rep, size, timeout=self.usb._timeout)
+            return self.usb.usbdev().bulkRead(self.usb.usbtx.rep, size, timeout=self.usb.usbtx._timeout)
 
     def close(self):
         self.usb.close()
@@ -200,6 +200,7 @@ class CW521(object):
 
         #time1 = time.clock()
         errorlist = []
+        self.block_size = 8192
         for i in range(0, int(self.sram_len / self.block_size)):
             errorlist.extend(self.read_pattern_rng(i * self.block_size, self.block_size))
         #time2 = time.clock()

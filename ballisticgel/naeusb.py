@@ -41,6 +41,11 @@ from .  import ballistic_firmware as fw_ballistic
 
 from chipwhisperer.logging import *
 
+def quick_firmware_erase(product_id, serial_number=None):
+    naeusb = NAEUSB()
+    naeusb.con(serial_number=serial_number, idProduct=[product_id])
+    naeusb.enterBootloader(True)
+
 def _WINDOWS_USB_CHECK_DRIVER(device):
     """Checks which driver device is using
 
@@ -512,10 +517,12 @@ class NAEUSB:
                              '. Suggested to update firmware, as you may experience errors' +
                              '\nSee https://chipwhisperer.readthedocs.io/en/latest/api.html#firmware-update')
 
+        self._usbdev = self.usbtx._usbdev
         return self.usbtx.pid
 
     def usbdev(self):
-        raise AttributeError("Do Not Call Me")
+        if not self._usbdev: raise OSError("USB Device not found. Did you connect it first?")
+        return self._usbdev
 
     def close(self):
         """Close USB connection."""
