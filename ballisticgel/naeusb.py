@@ -41,7 +41,7 @@ from .  import ballistic_firmware as fw_ballistic
 
 from chipwhisperer.logging import *
 
-def quick_firmware_erase(product_id, serial_number=None):
+def quick_firmware_erase(product_id=0xC521, serial_number=None):
     naeusb = NAEUSB()
     naeusb.con(serial_number=serial_number, idProduct=[product_id])
     naeusb.enterBootloader(True)

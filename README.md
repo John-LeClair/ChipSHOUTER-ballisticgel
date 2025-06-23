@@ -86,12 +86,21 @@ The firmware build requires `make` and `arm-none-eabi-gcc`.
 
 ## Drivers ##
 
-As of commit f62ccdf0ea2d611deabf48ec3ad5db759205dbb0 and firmware version 2.0.0, 
+As of commit `f62ccdf0ea2d611deabf48ec3ad5db759205dbb0` and firmware version 2.0.0, 
 the CW521 now uses the same WCID driver assignment as ChipWhisperer devices,
 meaning no custom drivers need to be installed.
 
-If you have old firmware/drivers and want to update, instructions
-can be adapted from [ChipWhisperer's documentation on the subject](https://chipwhisperer.readthedocs.io/en/latest/drivers.html)
+If you have old firmware/drivers and want to update, the easiest method is to:
+
+1. Plug your Ballistic Gel board in
+1. Short JP1 (labelled ERASE)
+1. Unplug + replug your Ballistic Gel
+1. Run the following code:
+
+```python
+from ballisticgel import program_sam_firmware
+program_sam_firmware()
+```
 
 Note that the same `upgrade_firmware()` method is now available on the CW521 object:
 
