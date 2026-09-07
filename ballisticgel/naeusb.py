@@ -36,7 +36,7 @@ from typing import Optional, Union, List, Tuple, Dict, cast
 # from chipwhisperer.hardware.firmware import cw305  as fw_cw305
 # from chipwhisperer.hardware.firmware import cwnano  as fw_nano
 # from chipwhisperer.hardware.firmware import cwhusky as fw_cwhusky
-from .  import ballistic_firmware as fw_ballistic
+# from .  import ballistic_firmware as fw_ballistic
 
 
 from chipwhisperer.logging import *
@@ -144,10 +144,17 @@ def packuint16(data):
 
 
 #List of all NewAE PID's
-NEWAE_VID = 0x2B3E
+#NEWAE_VID = 0x2B3E
+#NEWAE_PIDS = {
+#    0xC521: {'name': "Ballistic-Gel", 'fwver': fw_ballistic.fwver}
+# }
+# TODO: JLECLAIR change to condor.
+
+NEWAE_VID = 0x04d8
 NEWAE_PIDS = {
-    0xC521: {'name': "Ballistic-Gel", 'fwver': fw_ballistic.fwver}
+    0xe51f: {'name': "EMFI-Target", 'fwver': None}
 }
+# idVendor=03eb, idProduct=6124, bcdDevice= 1.10
 
 class NAEUSB_Backend:
     """
@@ -261,7 +268,7 @@ class NAEUSB_Backend:
             self.handle = None
 
     def get_possible_devices(self, idProduct=None, dictonly=True):
-        """Get list of USB devices that match NewAE vendor ID (0x2b3e) and
+        """Get list of USB devices that match NewAE vendor ID (0x2b3e) or Condor Embedded Technology vendor ID (0x03eb)
         optionally a product ID
 
         Checks VendorID, then makes sure the devices are accessable
@@ -272,8 +279,10 @@ class NAEUSB_Backend:
             List of USBDevice that match Vendor/Product IDs
             """
         
-        dev_list = [dev for dev in self.usb_ctx.getDeviceIterator() if dev.getVendorID() == 0x2b3e]
+        # dev_list = [dev for dev in self.usb_ctx.getDeviceIterator() if dev.getVendorID() == 0x2b3e]   #TODO: JLECLAIR
+        dev_list = [dev for dev in self.usb_ctx.getDeviceIterator() if dev.getVendorID() == 0x04d8]   #TODO: JLECLAIR
         naeusb_logger.info("Found NAEUSB devices {}".format(dev_list))
+        #print("Found NAEUSB devices {}".format(dev_list))
         
         if os.name == "nt":
             for dev in dev_list:
@@ -281,9 +290,14 @@ class NAEUSB_Backend:
                 if (win_driver != "usbccgp") and (win_driver.upper() != "WINUSB"):
                     naeusb_logger.warning("Invalid driver {} detected. If you have connection problems, try upgrading your driver".format(win_driver))
                     naeusb_logger.warning("See https://chipwhisperer.readthedocs.io/en/latest/drivers.html for more information")
-        if not (idProduct is None):
-            dev_list = [dev for dev in dev_list if dev.getProductID() in idProduct]
 
+        for dev in dev_list:
+            print(f"{dev.getProductID():x}")  #jleclair
+
+
+        # if not (idProduct is None): # jleclair
+        #     dev_list = [dev for dev in dev_list if dev.getProductID() in idProduct]  #TODO: JLECLAIR
+ 
         naeusb_logger.info("Found NAEUSB devices {}".format(dev_list))
         
         if len(dev_list) == 0:
@@ -498,24 +512,25 @@ class NAEUSB:
         self.usbtx.open(idProduct=idProduct, serial_number=serial_number, connect_to_first=True, hw_location=hw_location)
 
 
+
         self.snum=self.usbtx.sn
-        fwver = self.readFwVersion()
-        naeusb_logger.info('SAM3U Firmware version = %d.%d b%d' % (fwver[0], fwver[1], fwver[2]))
+#        fwver = self.readFwVersion()
+#        naeusb_logger.info('SAM3U Firmware version = %d.%d b%d' % (fwver[0], fwver[1], fwver[2]))
 
 
-        fw_latest : List[int] = [0, 0]
+#        fw_latest : List[int] = [0, 0]
+#
+ #       if self.usbtx.pid in NEWAE_PIDS:
+  #          name = NEWAE_PIDS[self.usbtx.pid]['name']
+   #         fw_latest = cast(List[int], NEWAE_PIDS[self.usbtx.pid]['fwver'])
+#        else:
+#            name = "Unknown (PID = %04x)"%self.usbtx.pid
 
-        if self.usbtx.pid in NEWAE_PIDS:
-            name = NEWAE_PIDS[self.usbtx.pid]['name']
-            fw_latest = cast(List[int], NEWAE_PIDS[self.usbtx.pid]['fwver'])
-        else:
-            name = "Unknown (PID = %04x)"%self.usbtx.pid
-
-        latest = fwver[0] > fw_latest[0] or (fwver[0] == fw_latest[0] and fwver[1] >= fw_latest[1])
-        if not latest:
-            naeusb_logger.warning('Your firmware is outdated - latest is %d.%d' % (fw_latest[0], fw_latest[1]) +
-                             '. Suggested to update firmware, as you may experience errors' +
-                             '\nSee https://chipwhisperer.readthedocs.io/en/latest/api.html#firmware-update')
+#        latest = fwver[0] > fw_latest[0] or (fwver[0] == fw_latest[0] and fwver[1] >= fw_latest[1])
+#        if not latest:
+#            naeusb_logger.warning('Your firmware is outdated - latest is %d.%d' % (fw_latest[0], fw_latest[1]) +
+#                             '. Suggested to update firmware, as you may experience errors' +
+#   jleclair                           '\nSee https://chipwhisperer.readthedocs.io/en/latest/api.html#firmware-update')
 
         self._usbdev = self.usbtx._usbdev
         return self.usbtx.pid

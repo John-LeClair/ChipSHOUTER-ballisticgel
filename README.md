@@ -2,9 +2,7 @@
 
 EMFI-TARGET is an Electro-Magnetic Fault Injection (EMFI) target. It is specially designed to help you understand fault injection patterns for a given tip.
 
-It uses a large SRAM chip as a target, which has a relatively simple layout. This lets you understand how much of a given chip you are corrupting. It is based on NewAE's incredibly useful
-
-ChipSHOUTER® CW521 Ballistic Gel.
+It uses a large SRAM chip as a target, which has a relatively simple layout. This lets you understand how much of a given chip you are corrupting. EMFI-TARGET is based on NewAE's incredibly useful ChipSHOUTER® CW521 Ballistic Gel. I found NewAE's CW521 Ballistic Gel constantly out of stock - thus I made  manufactured my own. Manufactured in the United States of America with globally sourced parts. 
 
 ![](cw520_photo.jpg)
 
@@ -89,7 +87,7 @@ The firmware build requires `make` and `arm-none-eabi-gcc`.
 ## Drivers ##
 
 As of commit `f62ccdf0ea2d611deabf48ec3ad5db759205dbb0` and firmware version 2.0.0, 
-the CW521 now uses the same WCID driver assignment as ChipWhisperer devices,
+the EMFI-TARGET now uses the same WCID driver assignment as ChipWhisperer devices,
 meaning no custom drivers need to be installed.
 
 If you have old firmware/drivers and want to update, the easiest method is to:
@@ -112,9 +110,71 @@ cw521 = CW521()
 cw521.upgrade_firmware()
 ```
 
+## Flashing Firmware via Bossac
+# EMFI-TARGET Firmware Build & Flash Guide
+
+This guide outlines the complete step-by-step process for configuring, compiling, and flashing custom firmware to the NCondor Embedded Technology, LLC  EMFI-TARGET platform natively via Linux without Python.
+
+---
+
+## 🛠️ Step 1: Install Build Dependencies & Flash Tools
+
+Before compiling or flashing, install the standard GNU compilation stack, the ARM embedded toolchain, and the native BOSSA toolchain utility (`bossac`).
+
+```bash
+sudo apt update
+sudo apt install build-essential git gcc-arm-none-eabi bossa-cli
+```
+
+---
+
+## ⚙️ Step 2: Compile the Application
+
+Wipe existing artifact objects and trigger the project Makefile compiler sequence from inside the `firmware/emfi_target` directory:
+
+```bash
+make clean
+make
+```
+*This step produces the flashable native firmware execution payload at: `emfi_target.bin`*
+
+---
+
+## 🔄 Step 5: Force the EMFI-TARGET into Bootloader Mode
+
+To make the board appear as a flashable interface to your Linux system, you must clear the existing flash memory to expose the ROM-resident SAM-BA bootloader.
+
+1. Locate the two small physical buttons on the top edge of the red PCB.
+   * **Left Button (`nRST`):** Master hardware reset.
+   * **Right Button (`ERASE`):** Memory array clear line.
+2. While the board is connected and powered via USB, **press and hold the Erase pins or button for 1–2 seconds**. 
+3. This completely clears out the corrupt or active application stack so the microchip defaults straight to its integrated hardware boot protocol.
+
+---
+
+## ⚡ Exact Flashing Sequence (Step-by-Step)
+
+Because there isn't a third dedicated boot-selection key, you must execute a strict physical dual-button sequence to isolate the chip and expose its flash controller interfaces cleanly over USB.
+
+### 🏃‍♂️ Execution Sequence
+1. **Connect** the EMFI-TARGET to your Linux computer via the USB cable.
+2. **Press and hold** down the **Erase (Right)** button.
+3. While keeping the Erase button held down, **tap** the **Reset (Left)** button once.
+4. Continue holding the **Erase (Right)** button for 1–2 additional seconds, then **release** it.
+5. **Disconnect** the USB cable from the board, then **reconnect** it.
+
+### 📝 Final Payload Write Execution
+Verify that the system heartbeat LED remains completely unlit (indicating safe bootloader execution mode). Locate the newly assigned virtual serial interface profile via `ls /dev/ttyACM*`, then run the raw `bossac` terminal utility command:
+
+```bash
+bossac --port=ttyACM0 -e -w -v -b emfi_target.bin
+```
+
+
 ## Legal ##
 EMFI-TARGET is based on the Ballistic Gel open-source project which is GPL licensed - thus EMFI-TARGET is released with the GPL license.
-The EMFI-TARGET uses Condor Embedded Technology, LLC's USB VID/PID. Microchip's USB-IF license disallows sub-licensing. 
+
+The EMFI-TARGET uses Condor Embedded Technology, LLC's USB VID/PID. Microchip's USB-IF license disallows sub-licensing. Therefore, if selling your own verison of this hardware, you must obtain your own VID/PID. 
 
 The EMFI-TARGET can be purchased by contacting jleclair@condorembeddedtech.com. 
 

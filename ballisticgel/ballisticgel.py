@@ -19,15 +19,19 @@
 #    along with this project.  If not, see <http://www.gnu.org/licenses/>.
 #=============================================================================
 
+import sys
+print("DEBUG PYTHON:", sys.executable)
+
 import random
 
 import numpy as np
 import matplotlib.mlab as mlab
+import matplotlib.mlab as mlab
 import matplotlib.pyplot as plt
-from .ChipWhispererSAM3Update import SAMFWLoader, get_at91_ports
+# TODO:from .ChipWhispererSAM3Update import SAMFWLoader, get_at91_ports
 
-from . import srammap
-from . import naeusb as NAE
+import srammap
+import naeusb as NAE
 import time
 from typing import Optional, Type, Union
 
@@ -337,8 +341,8 @@ class CW521(object):
 
 if __name__ == "__main__":
 
-    print(" CW521 Ballistic Gel Example Script ")
-    print("  by NewAE Technology Inc")
+    print(" EMFI Target Example: ")
+    print("  by Condor Embedded Technology based on NewAE Technology Inc software")
     print(" This script will continue until you exit with Ctrl-C")
     
     cw521 = CW521()
