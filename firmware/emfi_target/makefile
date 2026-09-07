@@ -31,6 +31,7 @@
 # Target file name (without extension).
 # This is the base name of the compiled .hex file.
 TARGET = cw521
+TARGET_REALTARGET = emfi_target
 
 # List C source files here.
 # Header files (.h) are automatically pulled in.
