@@ -27,8 +27,8 @@ The SRAM pattern can be something besides the random pattern, but the random pat
 
 An example of using the file is given at the end of ballisticgel.py, see the following:
 
-	cw521 = CW521()
-    cw521.con()
+    emfi_target = EMFI_TARGET()
+    emfi_target.con()
     
     doplot = False
     savefile = None
@@ -41,14 +41,14 @@ An example of using the file is given at the end of ballisticgel.py, see the fol
         try:        
             if use_raw_method:
                 print "Writing data..."
-                cw521.raw_test_setup()
+                emfi_target.raw_test_setup()
                 raw_input("Hit enter when glitch inserted")
-                results = cw521.raw_test_compare()
+                results = emfi_target.raw_test_compare()
             else:
                 print "Writing data..."
-                cw521.seed_test_setup()
+                emfi_target.seed_test_setup()
                 raw_input("Hit enter when glitch inserted")
-                results = cw521.seed_test_compare()
+                results = emfi_target.seed_test_compare()
             
             errdatay = results['errdatay']
             errdatax = results['errdatax']
@@ -63,7 +63,7 @@ An example of using the file is given at the end of ballisticgel.py, see the fol
                 with open(savefile, "wb") as errfile:
                     errfile.write(bytearray(errorlist))
         except:
-            cw521.close()
+            emfi_target.close()
 
 The "graph" that pops up afterwards is slightly bogus - the physical map of the SRAM is not yet accurate. But the most interesting aspect is that you can see number of bit flips (positive/negative), and total number of bytes corrupted.
 
@@ -105,9 +105,9 @@ program_sam_firmware()
 Note that the same `upgrade_firmware()` method is now available on the CW521 object:
 
 ```python
-from ballisticgel import CW521
-cw521 = CW521()
-cw521.upgrade_firmware()
+from ballisticgel import EMFI_TARGET
+emfi_target = EMFI_TARGET()
+emfi_target.upgrade_firmware()
 ```
 
 ## Flashing Firmware via Bossac

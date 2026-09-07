@@ -65,7 +65,7 @@ def packuint32(data):
 
     return [data & 0xff, (data >> 8) & 0xff, (data >> 16) & 0xff, (data >> 24) & 0xff]
 
-class CW521(object):
+class EMFI_TARGET(object):
     """This class defines communications with CW521 Ballistic Gel Target"""
 
     REQ_CHECKMEM_RNG = 0x15
@@ -73,16 +73,17 @@ class CW521(object):
     REQ_MEMREAD_RNG_BULK = 0x18
 
     sram_len = 4194304
-    _hw_type = "cw521"
+    _hw_type = "emfi-target"
 
     def _getNAEUSB(self):
         return self.usb
 
     def _getCWType(self):
-        return "cw521"
+        return "emfi-target"
 
-    def con(self, usb_vid=0x2B3E, usb_pid=0xC521):
-        """Connect to the Ballistic Gel, use default VID/PID"""
+    #  Condor Embedded Technologies, LLC sublicense VID/PID
+    def con(self, usb_vid=0x04D8, usb_pid=0xE51F):  
+        """Connect to the EMFI_TARGET, use default VID/PID"""
 
         self.usb = NAE.NAEUSB()
         self.usb.con(idProduct=[usb_pid])
@@ -345,8 +346,8 @@ if __name__ == "__main__":
     print("  by Condor Embedded Technology based on NewAE Technology Inc software")
     print(" This script will continue until you exit with Ctrl-C")
     
-    cw521 = CW521()
-    cw521.con()
+    emfi_target = EMFI_TARGET()
+    emfi_target.con()
     
     doplot = False
     savefile = None
@@ -367,16 +368,16 @@ if __name__ == "__main__":
         try:        
             if use_raw_method:
                 print("LOOP START: Writing data to SRAM...")
-                cw521.raw_test_setup()
+                emfi_target.raw_test_setup()
                 input(" Hit enter when glitch inserted")
                 print(" Reading SRAM data...")
-                results = cw521.raw_test_compare()
+                results = emfi_target.raw_test_compare()
             else:
                 print("LOOP START: Writing data to SRAM...")
-                cw521.seed_test_setup()
+                emfi_target.seed_test_setup()
                 input(" Hit enter when glitch inserted")
                 print(" Reading SRAM data...")
-                results = cw521.seed_test_compare()
+                results = emfi_target.seed_test_compare()
             
             errdatay = results['errdatay']
             errdatax = results['errdatax']
@@ -394,7 +395,7 @@ if __name__ == "__main__":
             print("")
         
         except:
-            cw521.close()
+            emfi_target.close()
             raise
 
 
