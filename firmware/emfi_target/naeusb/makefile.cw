@@ -49,9 +49,8 @@ else ifeq ($(TARGET),cw521)
 	SRC += naeusb/sam3u_hal/usart.c naeusb/sam3u_hal/write.c naeusb/sam3u_hal/usb_no_cdc/udi_vendor_desc.c
 
 	EXTRAINCDIRS += naeusb/sam3u_hal/inc
-endif
 
-else ifeq ($(TARGET),cw521)
+else ifeq ($(TARGET),emfi_target)
 	CFLAGS += -D__SAM3U4E__
 	SRC += naeusb/sam3u_hal/chipid.c naeusb/sam3u_hal/cycle_counter.c naeusb/sam3u_hal/efc.c naeusb/sam3u_hal/exceptions.c
 	SRC += naeusb/sam3u_hal/flash_efc.c naeusb/sam3u_hal/interrupt_sam_nvic.c naeusb/sam3u_hal/led.c
