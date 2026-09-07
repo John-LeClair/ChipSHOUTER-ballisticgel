@@ -362,6 +362,7 @@ if __name__ == "__main__":
 
     print("Starting main loop now: \n")
     
+
     while True:
         try:        
             if use_raw_method:

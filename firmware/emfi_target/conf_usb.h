@@ -53,8 +53,8 @@
  */
 
 //! Device definition (mandatory)
-#define  USB_DEVICE_VENDOR_ID             0x03EB
-#define  USB_DEVICE_PRODUCT_ID            0x6124
+#define  USB_DEVICE_VENDOR_ID             0x04D8   /* Condor Embedded Technologies, LLC Microchip-approved sublicense of USB VID/PID*/
+#define  USB_DEVICE_PRODUCT_ID            0xe51F
 #define  USB_DEVICE_MAJOR_VERSION         2
 #define  USB_DEVICE_MINOR_VERSION         0
 #define  USB_DEVICE_POWER                 500 // Consumption on Vbus line (mA)
