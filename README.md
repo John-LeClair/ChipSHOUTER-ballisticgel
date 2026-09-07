@@ -1,8 +1,10 @@
-# ChipSHOUTER® CW521 Ballistic Gel
+# EMFI-TARGET
 
-The CW521 is an Electro-Magnetic Fault Injection (EMFI) target. It is specially designed to help you understand fault injection patterns for a given tip.
+EMFI-TARGET is an Electro-Magnetic Fault Injection (EMFI) target. It is specially designed to help you understand fault injection patterns for a given tip.
 
-It uses a large SRAM chip as a target, which has a relatively simple layout. This lets you understand how much of a given chip you are corrupting.
+It uses a large SRAM chip as a target, which has a relatively simple layout. This lets you understand how much of a given chip you are corrupting. It is based on NewAE's incredibly useful
+
+ChipSHOUTER® CW521 Ballistic Gel.
 
 ![](cw520_photo.jpg)
 
@@ -10,7 +12,7 @@ It uses a large SRAM chip as a target, which has a relatively simple layout. Thi
 
 The GIT repository contains the following:
 
-1) PCB source (Altium) + gerber files
+1) Kicad PCB files. 
 2) Firmware for the microcontroller.
 3) Python library / PC application.
 
@@ -79,7 +81,7 @@ The result information is provided in a dictionary. Depending if you use the fas
 ## Building Firmware ##
 
 The firmware uses the ChipWhisperer capture build system (naeusb). Navigate to
-`firmware/cw521` and run `git submodule update --init naeusb`. Once this has completed,
+`firmware/emfi_target`
 run `make`.
 
 The firmware build requires `make` and `arm-none-eabi-gcc`.
@@ -92,9 +94,9 @@ meaning no custom drivers need to be installed.
 
 If you have old firmware/drivers and want to update, the easiest method is to:
 
-1. Plug your Ballistic Gel board in
+1. Plug your EMFI-TARGET board in
 1. Short JP1 (labelled ERASE)
-1. Unplug + replug your Ballistic Gel
+1. Unplug + replug your EMFI-TARGET
 1. Run the following code:
 
 ```python
@@ -111,9 +113,14 @@ cw521.upgrade_firmware()
 ```
 
 ## Legal ##
+EMFI-TARGET is based on the Ballistic Gel open-source project which is GPL licensed - thus EMFI-TARGET is released with the GPL license.
+The EMFI-TARGET uses Condor Embedded Technology, LLC's USB VID/PID. Microchip's USB-IF license disallows sub-licensing. 
+
+The EMFI-TARGET can be purchased by contacting jleclair@condorembeddedtech.com. 
 
 Ballistic Gel is part of the ChipSHOUTER project (which is itself related to the ChipWhisperer project). It is also known as the CW521 target board.
 
 Ballistic Gel is an open-source project, and is released with the GPL license. Assembled boards can be purchased from NewAE Technology Inc at https://store.newae.com .
 
 ChipSHOUTER is a registered trademark of NewAE Technoloy Inc. Note you CANNOT sell boards using the ChipSHOUTER name without permission, and you cannot use NewAE Technology Inc's USB VID on your own products as the USB-IF license disallows sub-licensing in this manner. If you change the VID/PID, simply change the associated VID/PID in the .inf (driver) file as needed.
+
