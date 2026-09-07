@@ -14,6 +14,39 @@ The GIT repository contains the following:
 2) Firmware for the microcontroller.
 3) Python library / PC application.
 
+# Virtual Development Environment Setup (Linux)
+
+Creating a pyenv environment (ie: Python 3.10.12).
+
+```bash
+cd ~/venvs
+python3 -m venv emfi-blaster
+source ~/venvs/emfi-blaster/bin/activate
+```
+
+## Install required libraries
+
+```bash
+pip install numpy
+pip install matplotlib
+pip install libusb1
+pip install debugpy   # optional
+```
+
+## Install ChipWhisperer repo
+
+```bash
+cd ~/dev/
+git clone https://github.com/John-LeClair/ChipSHOUTER-ballisticgel.git
+
+cd ~/dev
+git clone https://github.com/newaetech/chipwhisperer.git
+cd chipwhisperer
+python -m pip install -e .
+```
+
+
+
 ## PC Application ##
 
 The PC application is a simple example of using the Python library. This application does the following (via the library)
