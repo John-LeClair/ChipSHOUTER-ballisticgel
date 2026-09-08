@@ -4,7 +4,7 @@ EMFI-TARGET is an Electro-Magnetic Fault Injection (EMFI) target. It is speciall
 
 It uses a large SRAM chip as a target, which has a relatively simple layout. This lets you understand how much of a given chip you are corrupting. EMFI-TARGET is based on NewAE's incredibly useful ChipSHOUTER® CW521 Ballistic Gel. I found NewAE's CW521 Ballistic Gel constantly out of stock - thus I made  manufactured my own. Manufactured in the United States of America with globally sourced parts. 
 
-![](cw520_photo.jpg)
+![](emfi-target.jpg)
 
 ## GIT Layout ##
 
